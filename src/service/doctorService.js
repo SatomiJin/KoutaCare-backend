@@ -30,6 +30,13 @@ const getTopDoctorHome = (limit) => {
         raw: true,
         nest: true,
       });
+      if (users && users.length > 0) {
+        users.map((item) => {
+          item.image = Buffer.from(item.image, "base64").toString("binary");
+          return item;
+        });
+      }
+
       resolve({
         status: "OK",
         message: "Get list top doctors is success!",
@@ -55,7 +62,7 @@ const getAllDoctors = () => {
       resolve({
         status: "OK",
         message: "Get all doctors success!",
-        data: doctors,
+        users: doctors,
       });
     } catch (e) {
       reject(e);
@@ -64,7 +71,7 @@ const getAllDoctors = () => {
 };
 
 //let check require parameters
-let checkRequireParameters = (data) => {
+let checkRequireParameters = (users) => {
   let arr = [
     "doctorId",
     "contentHTML",
@@ -79,7 +86,7 @@ let checkRequireParameters = (data) => {
   let isValid = true;
   let element = "";
   for (let i = 0; i < arr.length; i++) {
-    if (!data[arr[i]]) {
+    if (!users[arr[i]]) {
       isValid = false;
       element = arr[i];
       break;
@@ -91,10 +98,10 @@ let checkRequireParameters = (data) => {
   };
 };
 //save detaiils doctor
-const saveDetailDoctor = (data) => {
+const saveDetailDoctor = (users) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let checkData = checkRequireParameters(data);
+      let checkData = checkRequireParameters(users);
 
       if (checkData.isValid === false) {
         resolve({
@@ -103,21 +110,21 @@ const saveDetailDoctor = (data) => {
         });
       } else {
         await db.Markdown.create({
-          contentHTML: data.contentHTML,
-          contentMarkdown: data.contentMarkdown,
-          description: data.description,
-          doctorId: data.doctorId,
+          contentHTML: users.contentHTML,
+          contentMarkdown: users.contentMarkdown,
+          description: users.description,
+          doctorId: users.doctorId,
         });
         await db.DoctorInfo.create({
-          doctorId: data.doctorId,
-          priceId: data.selectedPrice,
-          paymentId: data.selectedPayment,
-          provinceId: data.selectedProvince,
-          nameClinic: data.nameClinic,
-          addressClinic: data.addressClinic,
-          note: data.note,
-          specialtyId: data.specialtyId,
-          clinicId: data.clinicId,
+          doctorId: users.doctorId,
+          priceId: users.selectedPrice,
+          paymentId: users.selectedPayment,
+          provinceId: users.selectedProvince,
+          nameClinic: users.nameClinic,
+          addressClinic: users.addressClinic,
+          note: users.note,
+          specialtyId: users.specialtyId,
+          clinicId: users.clinicId,
         });
         resolve({
           status: "OK",
@@ -131,10 +138,10 @@ const saveDetailDoctor = (data) => {
 };
 
 //edit details doctor
-const editDetailsDoctor = (data) => {
+const editDetailsDoctor = (users) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.doctorId) {
+      if (!users.doctorId) {
         resolve({
           status: "ERROR",
           message: "Missing doctor for edit",
@@ -142,32 +149,32 @@ const editDetailsDoctor = (data) => {
       } else {
         //create doctor detail
         let doctor = await db.Markdown.findOne({
-          where: { doctorId: data.doctorId },
+          where: { doctorId: users.doctorId },
           raw: false,
         });
         //doctor info
         let doctorInfo = await db.DoctorInfo.findOne({
-          where: { doctorId: data.doctorId },
+          where: { doctorId: users.doctorId },
           raw: false,
         });
         if (doctor) {
-          doctor.contentHTML = data.contentHTML;
-          doctor.contentMarkdown = data.contentMarkdown;
-          doctor.description = data.description;
-          doctor.doctorId = data.doctorId;
+          doctor.contentHTML = users.contentHTML;
+          doctor.contentMarkdown = users.contentMarkdown;
+          doctor.description = users.description;
+          doctor.doctorId = users.doctorId;
           doctor.updateAt = new Date();
           await doctor.save();
         }
         if (doctorInfo) {
-          doctor.doctorId = data.doctorId;
-          doctorInfo.priceId = data.selectedPrice;
-          doctorInfo.paymentId = data.selectedPayment;
-          doctorInfo.provinceId = data.selectedProvince;
-          doctorInfo.nameClinic = data.nameClinic;
-          doctorInfo.addressClinic = data.addressClinic;
-          doctorInfo.note = data.note;
-          doctorInfo.specialtyId = data.specialtyId;
-          doctorInfo.clinicId = data.clinicId;
+          doctor.doctorId = users.doctorId;
+          doctorInfo.priceId = users.selectedPrice;
+          doctorInfo.paymentId = users.selectedPayment;
+          doctorInfo.provinceId = users.selectedProvince;
+          doctorInfo.nameClinic = users.nameClinic;
+          doctorInfo.addressClinic = users.addressClinic;
+          doctorInfo.note = users.note;
+          doctorInfo.specialtyId = users.specialtyId;
+          doctorInfo.clinicId = users.clinicId;
           await doctorInfo.save();
         }
       }
@@ -190,7 +197,7 @@ const getDetailsDoctorById = (id) => {
           message: "Missing required parameter!",
         });
       } else {
-        let data = await db.User.findOne({
+        let users = await db.User.findOne({
           where: { id: id },
           attributes: {
             exclude: ["password"],
@@ -217,13 +224,13 @@ const getDetailsDoctorById = (id) => {
           raw: false,
           nest: true,
         });
-        if (data && data.image) {
-          data.image = Buffer.from(data.image, "base64").toString("binary");
+        if (users && users.image) {
+          users.image = Buffer.from(users.image, "base64").toString("binary");
         }
         resolve({
           status: "OK",
           message: "Get details is success!",
-          data: data,
+          users: users,
         });
       }
     } catch (e) {
@@ -233,16 +240,16 @@ const getDetailsDoctorById = (id) => {
 };
 
 //create schedule for doctor
-const createSchedule = (data) => {
+const createSchedule = (users) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.listSchedule || !data.doctorId || !data.date) {
+      if (!users.listSchedule || !users.doctorId || !users.date) {
         resolve({
           status: "ERROR",
-          message: "Missing data for create schedule ",
+          message: "Missing users for create schedule ",
         });
       } else {
-        let listSchedule = data.listSchedule;
+        let listSchedule = users.listSchedule;
         if (listSchedule && listSchedule.length > 0) {
           listSchedule = listSchedule.map((schedule) => {
             schedule.maxNumber = MAX_NUMBER_SCHEDULE;
@@ -251,7 +258,7 @@ const createSchedule = (data) => {
         }
         // find schedule in db
         let existing = await db.Schedule.findAll({
-          where: { doctorId: data.doctorId, date: data.date },
+          where: { doctorId: users.doctorId, date: "" + users.date },
           attributes: ["timeType", "date", "doctorId", "maxNumber"],
           raw: true,
         });
@@ -348,7 +355,7 @@ const getExtraInfoDoctor = (id) => {
         resolve({
           status: "OK",
           message: "Get extra info success!",
-          data: dataInfo,
+          users: dataInfo,
         });
       }
     } catch (e) {
@@ -444,7 +451,7 @@ const getListPatientBooking = (doctorId, date) => {
         resolve({
           status: "OK",
           message: "Get list booking by patient success!!!",
-          data: listBooking,
+          users: listBooking,
         });
       }
     } catch (e) {
@@ -454,10 +461,10 @@ const getListPatientBooking = (doctorId, date) => {
 };
 
 //send remedy
-const sendRemedy = (data) => {
+const sendRemedy = (users) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.email || !data.doctorId || !data.patientId || !data.timeType) {
+      if (!users.email || !users.doctorId || !users.patientId || !users.timeType) {
         resolve({
           status: "ERROR",
           message: "Missing parameters....",
@@ -466,9 +473,9 @@ const sendRemedy = (data) => {
         //update patient status
         let appointment = await db.Booking.findOne({
           where: {
-            doctorId: data.doctorId,
-            patientId: data.patientId,
-            timeType: data.timeType,
+            doctorId: users.doctorId,
+            patientId: users.patientId,
+            timeType: users.timeType,
             statusId: "S2",
           },
           raw: false,
@@ -481,7 +488,7 @@ const sendRemedy = (data) => {
 
         //send remedy to email
 
-        await EmailService.sendAttachment(data);
+        await EmailService.sendAttachment(users);
         resolve({
           status: "OK",
           message: "Confirm appointment is success!!",
