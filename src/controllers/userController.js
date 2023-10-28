@@ -54,9 +54,17 @@ const getDetailUser = async (req, res) => {
 };
 //Create a new user
 const handleCreateNewUser = async (req, res) => {
-  const message = await userService.createNewUser(req.body);
-
-  return res.status(200).json(message);
+  try {
+    const message = await userService.createNewUser(req.body);
+    return res.status(200).json(message);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      status: "ERROR",
+      message: "Error from server...",
+      e: e.toString(),
+    });
+  }
 };
 
 //Edit user

@@ -80,6 +80,7 @@ const createSchedule = async (req, res) => {
     return res.status(200).json({
       status: "ERROR",
       message: "Error from create schedule",
+      e: e.toString(),
     });
   }
 };

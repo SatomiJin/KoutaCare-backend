@@ -102,7 +102,7 @@ const getDetailUser = (email) => {
         let userData = await db.User.findOne({
           where: { email: email },
           attributes: {
-            exclude: ["id", "password", "roleId", "phoneNumber", "positionId", "gender", "address"],
+            exclude: ["password", "roleId", "positionId"],
           },
         });
         if (userData && userData.image) {
@@ -218,7 +218,7 @@ const deleteUser = (id) => {
 const editUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.id || !data.roleId || !data.positionId || !data.gender) {
+      if (!data.id) {
         resolve({
           status: "ERROR",
           message: "Missing parameters for update user",

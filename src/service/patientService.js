@@ -23,6 +23,16 @@ const hashUserPassword = (password) => {
 const patientBookingAppointment = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(
+        !data.email,
+        !data.doctorId,
+        !data.fullName,
+        !data.date,
+        !data.timeType,
+        !data.address,
+        !data.gender,
+        !data.phoneNumber
+      );
       if (
         !data.email ||
         !data.doctorId ||
