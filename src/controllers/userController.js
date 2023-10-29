@@ -1,5 +1,15 @@
 import userService from "../service/userService";
 
+const helloWorld = (req, res) => {
+  try {
+    return res.status(200).json("Hello World!!!");
+  } catch (e) {
+    return res.status(200).json({
+      status: "ERRORS",
+      message: "Error from server",
+    });
+  }
+};
 const handleLogin = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -106,4 +116,5 @@ module.exports = {
   handleDeleteUser: handleDeleteUser,
   getAllCodes: getAllCodes,
   getDetailUser,
+  helloWorld,
 };

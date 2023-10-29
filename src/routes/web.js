@@ -8,6 +8,7 @@ let router = express.Router();
 
 let initWebRoute = (app) => {
   //route sử dụng
+  router.get("/", userController.helloWorld);
   router.post("/api/login", userController.handleLogin);
   //APi các chức năng CRUD
   router.get("/api/get-all-users", userController.handleGetAllUser);
