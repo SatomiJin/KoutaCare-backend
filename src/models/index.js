@@ -7,6 +7,7 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
+import * as pg from "pg";
 // const config = require(__dirname + "/../config/config.json")[env];
 const db = {};
 
@@ -21,6 +22,7 @@ const customConfig = {
       rejectUnauthorized: false,
     },
   },
+  dialectModule: pg,
 };
 sequelize = new Sequelize(process.env.DB_DATABASE_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, customConfig);
 // if (config.use_env_variable) {
