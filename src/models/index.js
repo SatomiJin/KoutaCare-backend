@@ -22,7 +22,7 @@ const customConfig = {
       rejectUnauthorized: false,
     },
   },
-  dialectModule: pg,
+  // dialectModule: pg,
   query: {
     raw: true,
   },
