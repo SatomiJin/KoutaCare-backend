@@ -65,6 +65,7 @@ const getDetailSpecialtyById = (specialtyId, location) => {
         let dataSpecialty = await db.Specialty.findOne({
           where: { id: specialtyId },
           attributes: ["descriptionHTML", "descriptionMarkdown"],
+          raw: true,
         });
 
         let doctorSpecialty = [];
@@ -82,12 +83,12 @@ const getDetailSpecialtyById = (specialtyId, location) => {
             });
           }
           // dataSpecialty.doctorSpecialty = doctorSpecialty;
-          
+
           resolve({
             status: "OK",
             message: "Get detail's specialty success!",
             dataSpecialty,
-            doctorSpecialty
+            doctorSpecialty,
           });
         } else {
           resolve({
@@ -97,6 +98,33 @@ const getDetailSpecialtyById = (specialtyId, location) => {
           });
         }
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const getDoctorBySpecialty = (specialtyId, location) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let doctorSpecialty = [];
+      if (location === "ALL") {
+        doctorSpecialty = await db.DoctorInfo.findAll({
+          where: { specialtyId: specialtyId },
+          attributes: ["doctorId", "provinceId"],
+        });
+      } else {
+        //find with location
+        doctorSpecialty = await db.DoctorInfo.findAll({
+          where: { specialtyId: specialtyId, provinceId: location },
+          attributes: ["doctorId", "provinceId"],
+        });
+      }
+      resolve({
+        status: "OK",
+        message: "Get doctor success!!",
+        doctorSpecialty,
+      });
     } catch (e) {
       reject(e);
     }
@@ -170,4 +198,5 @@ module.exports = {
   getDetailSpecialtyById,
   deleteSpecialtyById,
   editSpecialtyById,
+  getDoctorBySpecialty,
 };

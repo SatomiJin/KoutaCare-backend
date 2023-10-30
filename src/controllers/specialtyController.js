@@ -41,6 +41,18 @@ const getDetailSpecialtyById = async (req, res) => {
     });
   }
 };
+const getDoctorBySpecialty = async (req, res) => {
+  try {
+    const response = await specialtyService.getDoctorBySpecialty(req.query.specialtyId, req.query.location);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e.toString());
+    return res.status(200).json({
+      status: "ERROR",
+      message: "Error from server",
+    });
+  }
+};
 //edit specialty
 const editSpecialtyById = async (req, res) => {
   try {
@@ -80,4 +92,5 @@ module.exports = {
   getDetailSpecialtyById,
   deleteSpecialtyById,
   editSpecialtyById,
+  getDoctorBySpecialty,
 };

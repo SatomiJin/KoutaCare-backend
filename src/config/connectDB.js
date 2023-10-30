@@ -7,7 +7,7 @@ const sequelize = new Sequelize(process.env.DB_DATABASE_NAME, process.env.DB_USE
   dialect: "postgres",
   logging: false,
   query: {
-    "raw": true,
+    raw: true,
   },
   timezone: "+07:00",
   dialectOptions: {

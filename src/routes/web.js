@@ -39,6 +39,7 @@ let initWebRoute = (app) => {
   router.get("/api/get-all-specialty", specialtyController.getAllSpecialty);
   router.put("/api/edit-specialty", specialtyController.editSpecialtyById);
   router.get("/api/get-detail-specialty", specialtyController.getDetailSpecialtyById);
+  router.get("/api/get-doctor-by-specialty", specialtyController.getDoctorBySpecialty);
   router.delete("/api/delete-specialty", specialtyController.deleteSpecialtyById);
   //clinic
   router.post("/api/clinic/create-new-clinic", clinicController.createNewClinic);
