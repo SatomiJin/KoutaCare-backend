@@ -23,6 +23,10 @@ const customConfig = {
     },
   },
   dialectModule: pg,
+  query: {
+    raw: true,
+  },
+  timezone: "+07:00",
 };
 sequelize = new Sequelize(process.env.DB_DATABASE_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, customConfig);
 // if (config.use_env_variable) {
