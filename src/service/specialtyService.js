@@ -53,10 +53,10 @@ const getAllSpecialty = () => {
   });
 };
 //get detail specialty by id
-const getDetailSpecialtyById = (specialtyId, location) => {
+const getDetailSpecialtyById = (specialtyId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!specialtyId || !location) {
+      if (!specialtyId) {
         resolve({
           status: "ERROR",
           message: "Missing parameter for get detail",
@@ -67,36 +67,11 @@ const getDetailSpecialtyById = (specialtyId, location) => {
           attributes: ["descriptionHTML", "descriptionMarkdown"],
           raw: true,
         });
-
-        let doctorSpecialty = [];
-        if (dataSpecialty) {
-          if (location === "ALL") {
-            doctorSpecialty = await db.DoctorInfo.findAll({
-              where: { specialtyId: specialtyId },
-              attributes: ["doctorId", "provinceId"],
-            });
-          } else {
-            //find with location
-            doctorSpecialty = await db.DoctorInfo.findAll({
-              where: { specialtyId: specialtyId, provinceId: location },
-              attributes: ["doctorId", "provinceId"],
-            });
-          }
-          // dataSpecialty.doctorSpecialty = doctorSpecialty;
-
-          resolve({
-            status: "OK",
-            message: "Get detail's specialty success!",
-            dataSpecialty,
-            doctorSpecialty,
-          });
-        } else {
-          resolve({
-            status: "ERROR",
-            message: "Get detail's specialty failed!!",
-            data: [],
-          });
-        }
+        resolve({
+          status: "OK",
+          message: "Get detail's specialty success!",
+          dataSpecialty,
+        });
       }
     } catch (e) {
       reject(e);

@@ -31,7 +31,7 @@ const getAllSpecialty = async (req, res) => {
 //get detail specialty by id
 const getDetailSpecialtyById = async (req, res) => {
   try {
-    const response = await specialtyService.getDetailSpecialtyById(req.query.specialtyId, req.query.location);
+    const response = await specialtyService.getDetailSpecialtyById(req.query.specialtyId);
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
