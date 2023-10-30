@@ -81,12 +81,13 @@ const getDetailSpecialtyById = (specialtyId, location) => {
               attributes: ["doctorId", "provinceId"],
             });
           }
-          dataSpecialty.doctorSpecialty = doctorSpecialty;
-
+          // dataSpecialty.doctorSpecialty = doctorSpecialty;
+          
           resolve({
             status: "OK",
             message: "Get detail's specialty success!",
-            data: dataSpecialty,
+            dataSpecialty,
+            doctorSpecialty
           });
         } else {
           resolve({
