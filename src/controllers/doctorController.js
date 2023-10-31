@@ -118,7 +118,7 @@ const getProfileDoctor = async (req, res) => {
     const response = await doctorService.getProfileDoctor(req.query.doctorId);
     return res.status(200).json(response);
   } catch (e) {
-    console.log(e);
+    console.log(e.toString());
     return res.status(200).json({
       status: "ERROR",
       message: "Error from server...",

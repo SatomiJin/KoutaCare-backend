@@ -74,10 +74,30 @@ const getClinicById = async (req, res) => {
     });
   }
 };
+
+const getDoctorByClinic = async (req, res) => {
+  try {
+    if (!req.query.clinicId) {
+      return res.status(200).json({
+        status: "ERROR",
+        message: "Missing parameters...",
+      });
+    }
+    const response = await clinicService.getDoctorByClinic(req.query.clinicId);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      status: "ERROR",
+      message: "Error from server...",
+    });
+  }
+};
 module.exports = {
   createNewClinic,
   getAllClinic,
   editClinic,
   deleteClinicById,
   getClinicById,
+  getDoctorByClinic,
 };

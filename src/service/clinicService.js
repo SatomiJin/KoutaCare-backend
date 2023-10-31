@@ -138,10 +138,37 @@ const getClinicById = (id) => {
     }
   });
 };
+
+//get doctor be long to clinic
+const getDoctorByClinic = (clinicId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!clinicId) {
+        resolve({
+          status: "ERROR",
+          message: "Missing parameters to get list doctors",
+        });
+      } else {
+        let doctors = await db.DoctorInfo.findAll({
+          where: { clinicId: clinicId },
+          attributes: ["doctorId"],
+        });
+        resolve({
+          status: "OK",
+          message: "Get list doctor be long to clinic success!!!",
+          doctors: doctors,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   createNewClinic,
   getAllClinic,
   editClinic,
   deleteClinicById,
   getClinicById,
+  getDoctorByClinic,
 };

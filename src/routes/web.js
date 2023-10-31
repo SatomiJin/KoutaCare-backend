@@ -45,6 +45,7 @@ let initWebRoute = (app) => {
   router.post("/api/clinic/create-new-clinic", clinicController.createNewClinic);
   router.get("/api/clinic/get-all-clinic", clinicController.getAllClinic);
   router.get("/api/clinic/get-clinic-by-id", clinicController.getClinicById);
+  router.get("/api/clinic/get-doctor-by-clinic", clinicController.getDoctorByClinic);
   router.put("/api/clinic/edit-clinic", clinicController.editClinic);
   router.delete("/api/clinic/delete-clinic", clinicController.deleteClinicById);
   //booking manage doctor
